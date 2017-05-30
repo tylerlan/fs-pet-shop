@@ -30,13 +30,17 @@ if (cmd === 'read') {
     let pets = JSON.parse(data);
     let result = pets[index];
 
-    // Throw error if index is out of bounds
-    if (result === undefined) {
+    // Return the whole array if no index is specified
+    if (index === undefined) {
+      console.log(pets);
+      // Throw error if index is out of bounds
+    } else if (result === undefined) {
       console.error(`Usage: ${node} ${file} read INDEX`);
     } else {
-      return result;
+      console.log(result);;
     }
   })
+
 } else if (cmd === 'create') {
 
   var age = parseInt(process.argv[3]); // 3
