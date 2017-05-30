@@ -44,40 +44,34 @@ if (cmd === 'read') {
 
 } else if (cmd === 'create') {
 
-  var age = parseInt(process.argv[3]); // 3
-  var kind = process.argv[4]; // 'parakeet'
-  var name = process.argv[5]; // 'Cornflake'
+  var newAge = parseInt(process.argv[3]); // 3
+  var newKind = process.argv[4]; // 'parakeet'
+  var newName = process.argv[5]; // 'Cornflake'
 
   fs.readFile(petsPath, 'utf8', function(readErr, data) {
+
     if (readErr) throw readErr;
 
-    if (age && kind && name) {
-      console.log(`{ age: ${age}, kind: ${kind}, name: ${name}}`);
+    if (newAge && newKind && newName) {
+      let newPet = { age: newAge, kind: newKind, name: newName};
+
+      let pets = JSON.parse(data);
+
+      pets.push(newPet);
+
+      let newPetsData = JSON.stringify(pets);
+
+      fs.writeFile(petsPath, newPetsData, (writeErr) => {
+      if (writeErr) throw writeErr;
+      })
+
+      console.log(newPet);
+
     } else {
       console.error(`Usage: ${node} ${file} create AGE KIND NAME`);
       process.exit(1);
     }
-
   })
-
-  /*
-  node pets.js create
-      Usage: node pets.js create AGE KIND NAME
-
-  node pets.js create 3
-      Usage: node pets.js create AGE KIND NAME
-
-  node pets.js create 3 parakeet
-      Usage: node pets.js create AGE KIND NAME
-
-  node pets.js create 3 parakeet Cornflake
-      { age: 3, kind: 'parakeet', name: 'Cornflake' }
-
-  node pets.js read 2
-      { age: 3, kind: 'parakeet', name: 'Cornflake' }
-
-  */
-
 } else {
   console.error(`Usage: ${node} ${file} [read | create | update | destroy]`);
   process.exit(1);
