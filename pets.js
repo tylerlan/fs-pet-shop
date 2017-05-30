@@ -36,6 +36,7 @@ if (cmd === 'read') {
       // Throw error if index is out of bounds
     } else if (result === undefined) {
       console.error(`Usage: ${node} ${file} read INDEX`);
+      process.exit(1);
     } else {
       console.log(result);;
     }
@@ -54,6 +55,7 @@ if (cmd === 'read') {
       console.log(`{ age: ${age}, kind: ${kind}, name: ${name}}`);
     } else {
       console.error(`Usage: ${node} ${file} create AGE KIND NAME`);
+      process.exit(1);
     }
 
   })
