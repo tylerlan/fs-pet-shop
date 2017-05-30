@@ -23,18 +23,20 @@ process.argv[3] === '0'
 */
 
 if (cmd === 'read') {
-  console.log(typeof index);
   fs.readFile(petsPath, 'utf8', function(err, data) {
-    if (err) {
-      throw err;
-    }
+    if (err) throw err;
 
     var pets = JSON.parse(data);
+    var result = pets[index];
 
-    console.log(pets[index]);
+    // Throw error if index is out of bounds
+    if (result === undefined) {
+      console.error(`Usage: ${node} ${file} read INDEX`);
+    } else {
+      return result;
+    }
   });
-}
-else {
-  console.error(`Usage: ${node} ${file} read`);
+} else {
+  console.error(`Usage: ${node} ${file} [read | create | update | destroy]`);
   process.exit(1);
 }
