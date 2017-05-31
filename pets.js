@@ -70,10 +70,10 @@ if (cmd === 'read') {
   })
 } else if (cmd === 'update') {
 
-  let indexOfPetsData = process.argv[3]; //
-  let newAge = parseInt(process.argv[4]); //
-  let newKind = process.argv[5]; //
-  let newName = process.argv[6]; //
+  let indexOfPetsData = process.argv[3];
+  let newAge = parseInt(process.argv[4]);
+  let newKind = process.argv[5];
+  let newName = process.argv[6];
 
   fs.readFile(petsPath, 'utf8', function(readErr, data) {
     if (readErr) throw readErr;
@@ -98,6 +98,44 @@ if (cmd === 'read') {
     }
 
   })
+} else if (cmd === 'destroy') {
+
+  let indexOfPetsData = process.argv[3];
+
+  fs.readFile(petsPath, 'utf8', function(readErr, data) {
+    if (readErr) throw readErr;
+    if (indexOfPetsData) {
+      let petsArray = JSON.parse(data);
+      let destroyedPet = petsArray[indexOfPetsData];
+      petsArray.splice(indexOfPetsData, 1);
+      let newPetsData = JSON.stringify(petsArray);
+
+      fs.writeFile(petsPath, newPetsData, (writeErr) => {
+      if (writeErr) throw writeErr;
+      })
+
+      console.log(destroyedPet);
+
+    } else {
+      console.error(`Usage: ${node} ${file} destroy INDEX`);
+      process.exit(1);
+    }
+
+  })
+
+
+
+  /*
+  node pets.js destroy
+      Usage: node pets.js destroy INDEX
+
+  node pets.js destroy 1
+      { age: 5, kind: 'snake', name: 'Buttons' }
+
+  node pets.js read
+      [ { age: 7, kind: 'rainbow', name: 'fido' } ]
+  */
+
 } else {
   console.error(`Usage: ${node} ${file} [read | create | update | destroy]`);
   process.exit(1);
