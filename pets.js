@@ -1,3 +1,14 @@
+#!/usr/local/bin/node
+
+/* In order to use shebang on line 1 here, I need to change the permissions on this file to give the User eXecute privileges.
+
+IN TERMINAL:
+-------------------
+chmod u+x pets.js
+
+NOW, it doesn't matter what the extension is for this file; the terminal will see #! at the top of the file and know to use node for running the code below. How cool! Although definitely less useful outside of Unix.
+ */
+
 'use strict';
 
 const fs = require('fs');
@@ -7,19 +18,6 @@ const petsPath = path.join(__dirname, 'pets.json');
 const node = path.basename(process.argv[0]); // 'node'
 const file = path.basename(process.argv[1]); // 'pets.js'
 const cmd = process.argv[2]; // 'read'
-
-/*
-IN TERMINAL:
--------------------------------
-node pets.js read 0
-
-IN JS:
--------------------------------
-process.argv[0] === 'node'
-process.argv[1] === 'pets.js'
-process.argv[2] === 'read'
-process.argv[3] === '0'
-*/
 
 if (cmd === 'read') {
   var index = process.argv[3]; // '0'
@@ -122,20 +120,6 @@ if (cmd === 'read') {
     }
 
   })
-
-
-
-  /*
-  node pets.js destroy
-      Usage: node pets.js destroy INDEX
-
-  node pets.js destroy 1
-      { age: 5, kind: 'snake', name: 'Buttons' }
-
-  node pets.js read
-      [ { age: 7, kind: 'rainbow', name: 'fido' } ]
-  */
-
 } else {
   console.error(`Usage: ${node} ${file} [read | create | update | destroy]`);
   process.exit(1);
