@@ -8,8 +8,6 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
-app.disable('x-powered-by');
-
 app.get('/pets', function(req, res) {
   fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
     if (err) {
@@ -33,15 +31,15 @@ app.get('/pets/:id', function(req, res) {
       return res.sendStatus(500);
     }
 
-    var id = Number.parseInt(req.params.id);
     var pets = JSON.parse(petsJSON);
+    var id = Number.parseInt(req.params.id);
 
     if (id < 0 || id >= pets.length || Number.isNaN(id)) {
-      return res.set('Content-Type', 'text/plain').sendStatus(404);
+      return res.set('content-type', 'text/plain').sendStatus(404);
     }
 
     res.status(200);
-    res.set('Content-Type', 'application/json');
+    res.set('content-type', 'application/json');
     res.send(pets[id]);
   });
 });
@@ -49,51 +47,5 @@ app.get('/pets/:id', function(req, res) {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 })
-
-/*
-REQ_______________________________
-http GET localhost:3003/pets
-
-    RES ========================================
-    200
-    application/json
-    [{ "age": 7, "kind": "rainbow", "name": "fido" }, { "age": 5, "kind": "snake", "name": "Buttons" }]
-
-REQ_______________________________
-http GET localhost:3003/pets/0
-
-    RES ========================================
-    200
-    application/json
-    { "age": 7, "kind": "rainbow", "name": "fido" }
-
-REQ_______________________________
-http GET localhost:3003/pets/1
-
-    RES ========================================
-    200
-    application/json
-    { "age": 5, "kind": "snake", "name": "Buttons" }
-
-REQ_______________________________
-http GET localhost:3003/pets/2
-
-    RES ========================================
-    404
-    text/plain
-    Not Found
-
-REQ_______________________________
-http GET localhost:3003/pets/-1
-
-    RES ========================================
-    404
-    text/plain
-    Not Found
-*/
-
-
-
-
 
 module.exports = app;

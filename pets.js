@@ -17,7 +17,6 @@ const path = require('path');
 const petsPath = path.join(__dirname, 'pets.json');
 const node = path.basename(process.argv[0]); // 'node'
 const file = path.basename(process.argv[1]); // 'pets.js'
-
 const cmd = process.argv[2]; // 'read'
 
 var commands = {
