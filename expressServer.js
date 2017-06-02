@@ -9,6 +9,10 @@ const app = express();
 const port = process.env.PORT || 3003;
 
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
+
+app.disable('x-powered-by');
+app.use(morgan('short'));
 
 /* ======================= GETTING ======================================= */
 
