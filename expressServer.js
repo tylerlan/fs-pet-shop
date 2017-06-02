@@ -8,6 +8,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
+const bodyParser = require('body-parser');
+
 /* ======================= GETTING ======================================= */
 
 app.get('/pets', function(req, res) {
@@ -48,14 +50,45 @@ app.get('/pets/:id', function(req, res) {
 
 /* ======================= POSTING ======================================= */
 
-const bodyParser = require('body-parser');
-
 app.use(bodyParser.json()); // bodyParser.json() returns a Middleware that enables you to access the body of a request
 
-app.post('/pets', (res, req) => {
-  const body = req.body;
-  res.send(body);
-})
+app.post('/pets', function(req, res) {
+  fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
+
+    var petsArray = JSON.parse(petsJSON);
+    var petName = req.body.name;
+    var petKind = req.body.kind;
+    var petAge = parseInt(req.body.age);
+
+    if (!petName || !petKind || !petAge) {
+      return res.sendStatus(400);
+    }
+
+    let newPet = {age:petAge, kind: petKind, name:petName};
+
+    petsArray.push(newPet);
+
+    var newPetsJSON = JSON.stringify(petsArray);
+
+    fs.writeFile(petsPath, newPetsJSON, function(err) {
+      if (err) {
+        console.error(err.stack);
+        return res.sendStatus(500);
+      }
+
+      res.set('Content-Type', 'application/json');
+      res.send(newPet);
+    });
+  });
+});
+
+
+
+
 
 /* ======================= LISTENING ======================================= */
 app.listen(port, () => {
