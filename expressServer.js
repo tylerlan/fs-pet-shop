@@ -8,6 +8,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
+/* ======================= GETTING ======================================= */
+
 app.get('/pets', function(req, res) {
   fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
     if (err) {
@@ -44,6 +46,18 @@ app.get('/pets/:id', function(req, res) {
   });
 });
 
+/* ======================= POSTING ======================================= */
+
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json()); // bodyParser.json() returns a Middleware that enables you to access the body of a request
+
+app.post('/pets', (res, req) => {
+  const body = req.body;
+  res.send(body);
+})
+
+/* ======================= LISTENING ======================================= */
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 })
