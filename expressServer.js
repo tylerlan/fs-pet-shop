@@ -88,7 +88,7 @@ app.post('/pets', function(req, res) {
 
 // catch-all route handler
 app.use(function(req, res) {
-  res.set('Content-Type', 'text/plain');
+  // res.set('Content-Type', 'text/plain');
   res.sendStatus(404);
 });
 
