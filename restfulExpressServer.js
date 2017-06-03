@@ -1,9 +1,4 @@
-// const PetsDataStore = require('./PetsDataStore');
-// const petsDataStore = new PetsDataStore;
-
-const fs = require('fs');
-const path = require('path');
-const petsPath = path.join(__dirname, 'pets.json');
+const controllers = require('./controllers.js'); // The place where functions are stored.
 
 const express = require('express');
 const app = express();
@@ -20,53 +15,19 @@ app.use(bodyParser.json()); // bodyParser.json() returns a Middleware that enabl
     READ / RETRIEVE
 ===================== */
 
-app.get('/pets/:id', retrieve);
-
-function retrieve (req, res) {
-
-  if (!req.params.id) return; // silent fail
-
-  fs.readFile(petsPath, 'utf8', function(err, petsJSON){
-    if (err) {
-      console.error(err.stack);
-      return res.sendStatus(500);
-    }
-
-    var pets = JSON.parse(petsJSON);
-    var id = Number.parseInt(req.params.id);
-
-    if (id < 0 || id >= pets.length || Number.isNaN(id)) {
-      return res.set('content-type', 'text/plain').sendStatus(404);
-    }
-
-    res.status(200);
-    res.set('content-type', 'application/json');
-    res.send(pets[id]);
-  });
-};
+app.get('/pets/:id', controllers.retrieve);
 
 /* =====================
          QUERY
 ===================== */
 
-app.get('/pets', function(req, res) {
-  fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
-    if (err) {
-      console.error(err.stack);
-      return res.sendStatus(500);
-    }
-
-    var pets = JSON.parse(petsJSON);
-
-    res.send(pets);
-  });
-});
+app.get('/pets', controllers.query);
 
 /* =====================
          CREATE
 ===================== */
 
-
+app.post('/pets', controllers.create);
 
 /* =====================
         UPDATE
@@ -88,10 +49,12 @@ app.use((request, response) => {
   response.sendStatus(404);
 });
 
-
-
-
+/* =====================
+       listener
+===================== */
 
 app.listen(port, () => {
   console.log(`Now listening, to port ${port}`);
 });
+
+module.exports = app;
