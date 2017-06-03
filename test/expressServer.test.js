@@ -5,7 +5,7 @@ const request = require('supertest');
 
 // Set the port to a different number so that it does not conflict with the
 // other test files.
-process.env.PORT = 3003;
+process.env.PORT = 3005;
 const app = require('../expressServer');
 
 describe('pets expressServer', () => {
