@@ -40,7 +40,42 @@ function query (req, res) {
   });
 }
 
+function create (req, res) {
+  fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
+
+    var petsArray = JSON.parse(petsJSON);
+    var petName = req.body.name;
+    var petKind = req.body.kind;
+    var petAge = parseInt(req.body.age);
+
+    if (!petName || !petKind || !petAge) {
+      return res.sendStatus(400);
+    }
+
+    let newPet = {age:petAge, kind: petKind, name:petName};
+
+    petsArray.push(newPet);
+
+    var newPetsJSON = JSON.stringify(petsArray);
+
+    fs.writeFile(petsPath, newPetsJSON, function(err) {
+      if (err) {
+        console.error(err.stack);
+        return res.sendStatus(500);
+      }
+
+      res.set('Content-Type', 'application/json');
+      res.send(newPet);
+    });
+  });
+}
+
 module.exports = {
   retrieve: retrieve,
-  query: query
+  query: query,
+  create: create
 }
