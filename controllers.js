@@ -61,8 +61,8 @@ function retrieve (req, res) {
 };
 
 // function update (req, res) {
-  const changes = req.body;
-}
+//   const changes = req.body;
+// }
 
 // function delete (req, res) {
 //
@@ -80,8 +80,7 @@ function query (req, res) {
     res.status(200).set('content-type', 'application/json');
     res.send(pets);
   });
-}
-
+};
 
 module.exports = {
   retrieve: retrieve,
