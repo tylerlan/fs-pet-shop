@@ -93,8 +93,32 @@ function update(req, res) {
   });
 };
 
-function Delete (req, res) {
-  return;
+function deletePet (req, res) {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
+
+    const index = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (index < 0 || index >= pets.length || Number.isNaN(index)) {
+      return res.sendStatus(404);
+    }
+
+    const deletedPet = pets.splice(index, 1)[0];
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, (err) => {
+      if (err) {
+        console.error(err.stack);
+        return res.sendStatus(500);
+      }
+
+      res.send(deletedPet);
+    });
+  });
 }
 
 function query (req, res) {
@@ -116,7 +140,7 @@ module.exports = {
   query: query,
   create: create,
   update: update,
-  delete: Delete
+  deletePet: deletePet
 }
 
 

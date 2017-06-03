@@ -39,7 +39,7 @@ app.patch('/pets/:id', controllers.update);
          DELETE
 ===================== */
 
-// app.delete('/pets/:id', controllers.Delete);
+app.delete('/pets/:id', controllers.deletePet);
 
 /* =====================
      error handler
