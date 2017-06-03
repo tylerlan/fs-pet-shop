@@ -9,7 +9,7 @@ const morgan = require('morgan');
 
 app.disable('x-powered-by');
 app.use(morgan('short'));
-app.use(bodyParser.json()); // bodyParser.json() returns a Middleware that enables you to access the body of a request
+app.use(bodyParser.json());
 
 /* =====================
     READ / RETRIEVE
@@ -33,13 +33,13 @@ app.post('/pets', controllers.create);
         UPDATE
 ===================== */
 
-
+// app.patch('/pets/:id', controllers.update);
 
 /* =====================
          DELETE
 ===================== */
 
-
+// app.delete('/pets/:id', controllers.delete);
 
 /* =====================
      error handler
