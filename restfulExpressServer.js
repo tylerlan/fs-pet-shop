@@ -33,13 +33,13 @@ app.post('/pets', controllers.create);
         UPDATE
 ===================== */
 
-// app.patch('/pets/:id', controllers.update);
+app.patch('/pets/:id', controllers.update);
 
 /* =====================
          DELETE
 ===================== */
 
-// app.delete('/pets/:id', controllers.delete);
+// app.delete('/pets/:id', controllers.Delete);
 
 /* =====================
      error handler

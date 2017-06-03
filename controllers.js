@@ -49,24 +49,53 @@ function retrieve (req, res) {
     }
 
     var pets = JSON.parse(petsJSON);
-    var id = Number.parseInt(req.params.id);
+    var index = Number.parseInt(req.params.id);
 
-    if (id < 0 || id >= pets.length || Number.isNaN(id)) {
+    if (index < 0 || index >= pets.length || Number.isNaN(index)) {
       return res.set('content-type', 'text/plain').sendStatus(404);
     }
 
     res.status(200).set('content-type', 'application/json');
-    res.send(pets[id]);
+    res.send(pets[index]);
   });
 };
 
-// function update (req, res) {
-//   const changes = req.body;
-// }
+function update(req, res) {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
 
-// function delete (req, res) {
-//
-// }
+    const index = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (index < 0 || index >= pets.length || Number.isNaN(index)) {
+      return res.sendStatus(404);
+    }
+
+    const changes = req.body;
+    const age = Number.parseInt(changes.age);
+
+    var pet = pets[index];
+    updatedPet = Object.assign({}, pet, changes);
+    pets[index] = updatedPet;
+
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, (err) => {
+      if (err) {
+        return next(err);
+      }
+
+      res.send(updatedPet);
+    });
+  });
+};
+
+function Delete (req, res) {
+  return;
+}
 
 function query (req, res) {
   fs.readFile(petsPath, 'utf8', function(err, petsJSON) {
@@ -85,5 +114,36 @@ function query (req, res) {
 module.exports = {
   retrieve: retrieve,
   query: query,
-  create: create
+  create: create,
+  update: update,
+  delete: Delete
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
